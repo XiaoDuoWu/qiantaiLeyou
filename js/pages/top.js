@@ -11,14 +11,14 @@ const lyTop = {
                     </div> \
                     <div class='yui3-u Center searchArea'> \
                         <div class='search'> \
-                            <form action='' class='sui-form form-inline'> \
+                            <div action='' class='sui-form form-inline'> \
                                 <!--searchAutoComplete--> \
                                 <div class='input-append'> \
                                     <input type='text' id='autocomplete' v-model='key' \
-                                           class='input-error input-xxlarge'/> \
+                                           class='input-error input-xxlarge' @keyup.enter='search'/> \
                                     <button @click='search' class='sui-btn btn-xlarge btn-danger' type='button'>搜索</button> \
                                 </div> \
-                            </form> \
+                            </div> \
                         </div> \
                         <div class='hotwords'> \
                             <ul> \
