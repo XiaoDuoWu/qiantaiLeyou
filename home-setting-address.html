@@ -38,6 +38,8 @@ $(function(){
 <script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="js/widget/nav.js"></script>
+    <script type="text/javascript" src="js/plugins/citypicker/distpicker.data.js"></script>
+    <script type="text/javascript" src="js/plugins/citypicker/distpicker.js"></script>
 <script type="text/javascript" src="pages/userInfo/distpicker.data.js"></script>
 <script type="text/javascript" src="pages/userInfo/distpicker.js"></script>
 <script type="text/javascript" src="pages/userInfo/main.js"></script>
@@ -101,30 +103,108 @@ $(function(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>刘田田</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
+                                    <tr v-for="(address,i) in addressList">
+                                        <td>{{address.username}}</td>
+                                        <td>{{address.provinces}}  {{address.cities}} {{address.areas}} {{address.detailaddr}}</td>
+                                        <td>{{address.phone}}</td>
                                         <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            默认地址
+
+                                            <a data-toggle="modal" data-target=".edit1" data-keyboard="false" @click="update(i)"   class="sui-btn  btn-info add-new">编辑</a>
+                                            <a  href="javascript:void(0)"  @click="deleteDemo(i)" class="sui-btn  btn-info add-new" >删除</a>
+                                            <button :class="{selected: isdefault===1}" @click="isdefault=1">设为默认<span title="点击取消选择"></span></button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>沈沉</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            <a href="#">设为默认</a>
-                                        </td>
-                                    </tr>
-                                    
+
                                 </tbody>
                             </table>                          
                         </div>
+
+                        <!--编辑地址弹出层-->
+                        <div  tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade edit1" style="width:580px;">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+                                        <h4 id="myModalLabel1" class="modal-title">修改地址</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="" class="sui-form form-horizontal">
+                                            <div class="control-group">
+                                                <label class="control-label">收货人：</label>
+                                                <div class="controls">
+                                                    <input type="text" class="input-medium" v-model="thisAddress.username">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label  class="control-label">所在地区：</label>
+                                                <div class="controls">
+                                                    <div data-toggle="distpicker">
+                                                        <div class="form-group area">
+                                                            <select class="form-control" id="province11" v-model="thisAddress.provinces"></select>
+                                                        </div>
+                                                        <div class="form-group area">
+                                                            <select class="form-control" id="city11" v-model="thisAddress.cities"></select>
+                                                        </div>
+                                                        <div class="form-group area">
+                                                            <select class="form-control" id="district11" v-model="thisAddress.areas" ></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">详细地址：</label>
+                                                <div class="controls">
+                                                    <input type="text" class="input-large" v-model="thisAddress.detailaddr">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">联系电话：</label>
+                                                <div class="controls">
+                                                    <input type="text" class="input-medium" v-model="thisAddress.phone">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">邮箱：</label>
+                                                <div class="controls">
+                                                    <input type="text" class="input-medium" v-model="thisAddress.email">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">地址别名：</label>
+                                                <div class="controls">
+                                                    <input type="text" class="input-medium" v-model="thisAddress.addrname">
+                                                </div>
+                                                <div class="othername">
+                                                    建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
+                                                </div>
+                                            </div>
+
+                                        </form>
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large" @click="submitDemo">确定</button>
+                                        <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <!--新增地址弹出层-->
                          <div  tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade edit" style="width:580px;">
                             <div class="modal-dialog">
@@ -134,11 +214,11 @@ $(function(){
                                         <h4 id="myModalLabel" class="modal-title">新增地址</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="" class="sui-form form-horizontal">
+                                        <form action="" class="sui-form form-horizontal" id="formData">
                                             <div class="control-group">
                                             <label class="control-label">收货人：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" v-model="addr.username">
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -146,39 +226,39 @@ $(function(){
                                             <div class="controls">
                                                 <div data-toggle="distpicker">
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="province1"></select>
+                                                    <select class="form-control" id="province1" v-model="addr.provinces"></select>
                                                 </div>
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="city1"></select>
+                                                    <select class="form-control" id="city1" v-model="addr.cities"></select>
                                                 </div>
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="district1"></select>
+                                                    <select class="form-control" id="district1" v-model="addr.areas"></select>
                                                 </div>
                                             </div>
-                                            </div>									 
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="control-label">详细地址：</label>
-                                            <div class="controls">
-                                                <input type="text" class="input-large">
                                             </div>
                                         </div>
                                         <div class="control-group">
-                                            <label class="control-label">联系电话：</label>
+                                            <label class="control-label" >详细地址：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-large" v-model="addr.detailaddr">
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" >联系电话：</label>
+                                            <div class="controls">
+                                                <input type="text" class="input-medium" v-model="addr.phone">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">邮箱：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" v-model="addr.email">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">地址别名：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" v-model="addr.addrname">
                                             </div>
                                             <div class="othername">
                                                 建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
@@ -190,13 +270,12 @@ $(function(){
                                         
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
+                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large" @click="submit">确定</button>
                                         <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
                                     </div>
                                 </div>
                             </div>
 						</div>
-
                     </div>
                 </div>
             </div>
@@ -207,88 +286,84 @@ $(function(){
 	<!--页面底部，由js动态加载-->
 	<div class="clearfix footer"></div>
 	<script type="text/javascript">$(".footer").load("foot.html");</script>
+    <script src="./js/vue/vue.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/common.js"></script>
 	<!--页面底部END-->
 <script>
-    var orderInfoVm = new Vue({
-        el:"#orderInfoApp",
+    var address1 = new Vue({
+        el:"#account",
         data:{
             ly,
-            addressList:[// 可选地址列表,假数据，需要从后台查询
-                {
-                    id: 1,
-                    name:"虎哥",// 收件人姓名
-                    phone:"15800000000",// 电话
-                    state:"上海",// 省份
-                    city:"上海",// 城市
-                    district:"浦东新区",// 区
-                    address:"航头镇航头路18号传智播客 3号楼",// 街道地址
-                    zipCode:"210000", // 邮编
-                    isDefault: true
-                },
-                {
-                    id: 2,
-                    name:"张三",// 收件人姓名
-                    phone:"13600000000",// 电话
-                    state:"北京",// 省份
-                    city:"北京",// 城市
-                    district:"朝阳区",// 区
-                    address:"天堂路 3号楼",// 街道地址
-                    zipCode:"100000", // 邮编
-                    isDefault: false
-                }
-            ],
-            selectedAddress: {},
-            carts: [],
-            paymentType: 1,
+            addressList:[],
+            addr: {
+                username: '',
+                provinces: '',
+                cities:'',
+                areas:'',
+                detailaddr:'',
+                phone:'',
+                email:'',
+                addrname:'',
+
+
+            },
+            thisAddress:{
+                id:0,
+                username: '',
+                provinces: '',
+                cities:'',
+                areas:'',
+                detailaddr:'',
+                phone:'',
+                email:'',
+                addrname:'',
+
+
+            },
+            isdefault:0,
         },
         created(){
-            // 初始化默认地址
-            this.selectedAddress = this.addressList.find(a => a.isDefault);
             // 判断是否登录
             ly.http.get("/auth/verify").then(() => {
-                // 获取已选中的购物车
-                this.carts = ly.store.get("selectedCarts");
+                ly.http.get("/user/addr").then(address =>{
+                     this.addressList = address.data
+                }).catch(() =>{})
             }).catch(() => {
                 // 未登录则跳转到登录页
                 window.location.href = "/login.html?returnUrl=" + window.location.href;
             })
         },
         methods:{
+            deleteDemo(i){
+                ly.http.delete("/user/addr/delete/"+this.addressList[i].id).then(()=>{
+                    location.reload();
+                }).catch(()=>{
+                    alert("错误了");
+                })
+            },
+            update(i){
+            this.thisAddress= this.addressList[i]
+            },
+            submitDemo(){
+                const formData = JSON.stringify(this.thisAddress);
+                ly.http.put("/user/addr",this.thisAddress).then(()=>{
+                    location.reload();
+                }).catch(()=>{
+                })
+            },
             submit(){
+                const formData = JSON.stringify(this.addr); // 这里才是你的表单数据
                 ly.http.get("/auth/verify").then(() => {
-                    // 对carts处理
-                    const carts = this.carts.map(({skuId, num}) => ({skuId, num}));
-                    const order = {
-                        paymentType: this.paymentType, // 支付方式
-                        carts: carts, // 订单详情
-                        addressId: this.selectedAddress.id,// 收获地址的id
-                    };
-                    // 提交订单
-                    ly.http.post("/order-service/order",order,{
-                        transformResponse: [function (data) {
-                            return data;
-                        }]
-                    }).then(resp=>{
-                        // 订单创建成功，删除selectedCarts
-                        ly.store.del("selectedCarts");
-                        // 跳转到付款页,并传递付款id
-                        window.location.href = "/pay.html?id=" + resp.data;
-                    }).catch(() => {
-                        alert("创建订单失败！");
-                    })
+                  ly.http.post("/user/addr",this.addr).then(()=>{
+                      location.reload();
+                  }).catch(()=>{
+                  })
                 }).catch(() => {
                     window.location.href = "/login.html?returnUrl=" + window.location.href;
                 })
 
             }
-        },
-        computed:{
-            totalPrice(){
-                return this.carts.map(c => c.price * c.num).reduce((v1, v2) => v1 + v2, 0);
-            }
-        },
-        components:{
-            shortcut: () => import("/js/pages/shortcut.js")
         }
     });
 </script>
